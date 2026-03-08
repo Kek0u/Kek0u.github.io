@@ -38,19 +38,18 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
 .inp-code{font-family:var(--ft);letter-spacing:6px;text-transform:uppercase;}
 
 /* Barre hôte */
-.bar{background:rgba(0,0,0,.45);border-bottom:1px solid var(--border);position:-webkit-sticky;position:sticky;top:0;z-index:10;flex-shrink:0;}
-.bar-top{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;gap:8px;}
-.bar-title{font-family:var(--ft);color:var(--gold);font-size:15px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,.40);border-bottom:1px solid var(--border);position:-webkit-sticky;position:sticky;top:0;z-index:10;flex-shrink:0;gap:6px;flex-wrap:wrap;}
+.bar-top{display:contents;}
+.bar-bottom{display:contents;}
+.bar-title{font-family:var(--ft);color:var(--gold);font-size:15px;flex-shrink:0;}
 .bar-primary{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.bar-bottom{display:flex;gap:6px;padding:0 12px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-.bar-bottom::-webkit-scrollbar{display:none;}
-.bar-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
-.ibtn{padding:8px 12px;border-radius:12px;font-size:13px;font-weight:900;border:none;cursor:pointer;font-family:var(--f);-webkit-tap-highlight-color:transparent;transition:transform .1s,opacity .2s;white-space:nowrap;touch-action:manipulation;-webkit-appearance:none;appearance:none;flex-shrink:0;}
+.bar-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;flex:1;}
+.ibtn{padding:7px 10px;border-radius:12px;font-size:12px;font-weight:900;border:none;cursor:pointer;font-family:var(--f);-webkit-tap-highlight-color:transparent;transition:transform .1s,opacity .2s;white-space:nowrap;touch-action:manipulation;-webkit-appearance:none;appearance:none;flex-shrink:0;}
 .ibtn:active{transform:scale(.93);}
-.ibtn-pause{background:rgba(247,151,30,.25);color:#f7971e;border:1px solid rgba(247,151,30,.5);font-size:14px;padding:9px 14px;}
+.ibtn-pause{background:rgba(247,151,30,.25);color:#f7971e;border:1px solid rgba(247,151,30,.5);}
 .ibtn-new{background:rgba(102,126,234,.2);color:#a5b4fc;border:1px solid rgba(102,126,234,.4);}
 .ibtn-end{background:rgba(232,67,147,.2);color:#e84393;border:1px solid rgba(232,67,147,.4);}
-.ibtn-qnum{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);font-family:var(--ft);font-size:15px;cursor:default;padding:9px 14px;}
+.ibtn-qnum{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);font-family:var(--ft);cursor:default;}
 
 /* ══ SUSPENSE HÔTE ══════════════════════════════════════════ */
 #h-suspense{display:none;margin-top:14px;}
@@ -319,6 +318,36 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
 .suspense-count{font-size:12px;font-weight:800;margin-top:5px;opacity:.6;}
 .suspense-myans-banner{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 18px;border-radius:14px;font-weight:900;font-size:15px;animation:suspensePulse 1.6s ease-in-out infinite;width:100%;}
 .suspense-bars{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 14px;}
+
+/* ══ COMBAT D'AVATARS ════════════════════════════════════════ */
+@keyframes battleLeft{0%{transform:translateX(-60px) scale(.8);opacity:0}60%{transform:translateX(8px) scale(1.15)}100%{transform:translateX(0) scale(1);opacity:1}}
+@keyframes battleRight{0%{transform:translateX(60px) scale(.8);opacity:0}60%{transform:translateX(-8px) scale(1.15)}100%{transform:translateX(0) scale(1);opacity:1}}
+@keyframes battleShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes vsFlash{0%,100%{transform:scale(1);text-shadow:0 0 10px rgba(255,210,0,.4)}50%{transform:scale(1.2);text-shadow:0 0 30px rgba(255,210,0,1),0 0 60px rgba(255,100,0,.6)}}
+@keyframes battleBounceL{0%,100%{transform:translateX(0) scaleX(1)}50%{transform:translateX(6px) scaleX(.92)}}
+@keyframes battleBounceR{0%,100%{transform:translateX(0) scaleX(1)}50%{transform:translateX(-6px) scaleX(.92)}}
+@keyframes sparkle{0%{opacity:1;transform:scale(0) rotate(0deg)}50%{opacity:1;transform:scale(1.4) rotate(180deg)}100%{opacity:0;transform:scale(0) rotate(360deg)}}
+@keyframes battleLabelIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.battle-arena{width:100%;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:14px 10px;position:relative;overflow:hidden;}
+.battle-arena::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(255,210,0,.04) 0%,transparent 70%);pointer-events:none;}
+.battle-sides{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.battle-side{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.battle-side.left .battle-avatars-row{animation:battleLeft .5s cubic-bezier(.34,1.56,.64,1) forwards;opacity:0;}
+.battle-side.right .battle-avatars-row{animation:battleRight .5s cubic-bezier(.34,1.56,.64,1) forwards;opacity:0;animation-delay:.08s;}
+.battle-side.left .battle-avatars-row.is-shaking{animation:battleLeft .5s cubic-bezier(.34,1.56,.64,1) forwards, battleBounceL 1s ease-in-out .6s infinite;}
+.battle-side.right .battle-avatars-row.is-shaking{animation:battleRight .5s cubic-bezier(.34,1.56,.64,1) forwards, battleBounceR 1s ease-in-out .7s infinite;}
+.battle-avatars-row{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;}
+.battle-avatar{font-size:38px;line-height:1;display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));}
+.battle-label{font-family:var(--ft);font-size:22px;font-weight:900;animation:battleLabelIn .4s ease forwards;opacity:0;animation-delay:.3s;}
+.battle-label-name{font-size:11px;font-weight:800;letter-spacing:1px;color:rgba(255,255,255,.45);text-align:center;}
+.battle-vs{display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+.battle-vs-text{font-family:var(--ft);font-size:28px;color:var(--gold);animation:vsFlash 1.2s ease-in-out infinite;line-height:1;}
+.battle-sparks{font-size:18px;animation:sparkle 1s ease-in-out infinite .3s;}
+.battle-multi{display:flex;gap:8px;width:100%;margin-top:6px;}
+.battle-mini-camp{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:rgba(255,255,255,.05);border-radius:12px;padding:8px 4px;border:1px solid rgba(255,255,255,.08);}
+.battle-mini-label{font-family:var(--ft);font-size:16px;font-weight:900;}
+.battle-mini-avatars{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;font-size:20px;}
 </style>
 </head>
 <body>
@@ -402,20 +431,15 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
 
 <!-- ══ HÔTE JEU ════════════════════════════════════════════════ -->
 <div id="s-hgame" class="screen">
-  <!-- Barre : ligne 1 = nom + Q + Pause // ligne 2 = actions secondaires -->
   <div class="bar">
-    <div class="bar-top">
-      <span class="bar-title">👑 <span id="h-host-name"></span></span>
-      <div class="bar-primary">
-        <span class="ibtn ibtn-qnum" id="h-qnum">Q0</span>
-        <button class="ibtn ibtn-pause" id="btn-pause" onclick="togglePause()">⏸ Pause</button>
-      </div>
-    </div>
-    <div class="bar-bottom">
-      <button class="ibtn" style="background:rgba(255,210,0,.18);color:var(--gold);border:1px solid rgba(255,210,0,.4);" onclick="openPtsModal()">🎯 ± Points</button>
-      <button class="ibtn" style="background:rgba(232,67,147,.18);color:#e84393;border:1px solid rgba(232,67,147,.4);" onclick="openKickModal()">👢 Exclure</button>
-      <button class="ibtn ibtn-new" onclick="confirmAction('new')">🔄 Nouvelle partie</button>
-      <button class="ibtn ibtn-end" onclick="confirmAction('end')">🏁 Terminer</button>
+    <span class="bar-title">👑 <span id="h-host-name"></span></span>
+    <div class="bar-actions">
+      <span class="ibtn ibtn-qnum" id="h-qnum">Q0</span>
+      <button class="ibtn ibtn-pause" id="btn-pause" onclick="togglePause()">⏸ Pause</button>
+      <button class="ibtn" style="background:rgba(255,210,0,.18);color:var(--gold);border:1px solid rgba(255,210,0,.4);" onclick="openPtsModal()">± Pts</button>
+      <button class="ibtn" style="background:rgba(232,67,147,.18);color:#e84393;border:1px solid rgba(232,67,147,.4);" onclick="openKickModal()">👢</button>
+      <button class="ibtn ibtn-new" onclick="confirmAction('new')">🔄</button>
+      <button class="ibtn ibtn-end" onclick="confirmAction('end')">🏁</button>
     </div>
   </div>
   <div class="hbody">
@@ -2408,30 +2432,33 @@ const SUSPENSE_PHRASES = [
   '🎯 On y est presque…',
 ];
 
+const BATTLE_PHRASES = [
+  '⚔️ Le combat commence !',
+  '🥊 Les camps s\'affrontent !',
+  '🔥 Duel de cerveaux !',
+  '💥 Choc des titans !',
+  '⚡ Affrontement épique !',
+  '🎯 Qui va l\'emporter ?',
+];
+
 function showSuspense(byAnswer, dist, avatarMap, playerMyAns){
-  const phrase=SUSPENSE_PHRASES[Math.floor(Math.random()*SUSPENSE_PHRASES.length)];
   const total=Object.values(dist).reduce((s,v)=>s+v,0)||1;
 
-  // Construire les 4 camps
-  const campsHTML=['A','B','C','D'].map(l=>{
-    const players=byAnswer[l]||[];
-    const count=players.length;
-    const isEmpty=count===0;
-    const isMine=l===playerMyAns;
-    const avatarsHTML=players.map((n,idx)=>{
-      const av=avatarMap[n]||'👤';
-      const isMe=n===myName;
-      return `<span class="suspense-avatar${isMe?' is-mine':''}" style="animation-delay:${idx*.08}s;" title="${n}">${av}</span>`;
-    }).join('');
-    const pct=Math.round((dist[l]||0)/total*100);
-    return `<div class="suspense-camp${isEmpty?' empty':' has-players'}${isMine?' mine':''}" style="background:${BG[l]}22;">
-      <span class="suspense-camp-letter" style="color:${BG[l]};">${l}</span>
-      <div class="suspense-camp-avatars">${isEmpty?'<span style="font-size:20px;opacity:.3;">—</span>':avatarsHTML}</div>
-      <div class="suspense-count" style="color:${BG[l]};">${count} joueur${count>1?'s':''} · ${pct}%</div>
-    </div>`;
-  }).join('');
+  // Détecter les camps actifs (avec au moins 1 joueur)
+  const activeCamps=['A','B','C','D'].filter(l=>(byAnswer[l]||[]).length>0);
+  const isBattle = activeCamps.length >= 2;
 
-  // Barres de votes sans révéler la bonne réponse
+  // Bannière "ta réponse"
+  const myAnsBanner=playerMyAns
+    ? `<div class="suspense-myans-banner" style="background:${BG[playerMyAns]}22;border:2px solid ${BG[playerMyAns]}66;color:${BG[playerMyAns]};">
+        <span style="font-size:28px;">${playerMyAns}</span>
+        <span>Tu as répondu <strong>${playerMyAns}</strong></span>
+       </div>`
+    : `<div class="suspense-myans-banner" style="background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);">
+        ⏰ Tu n'as pas répondu à temps
+       </div>`;
+
+  // Barres de votes
   const barsHTML='<div class="vote-chart">'+['A','B','C','D'].map(l=>{
     const n=dist[l]||0;
     const pct=Math.round(n/total*100);
@@ -2445,26 +2472,97 @@ function showSuspense(byAnswer, dist, avatarMap, playerMyAns){
     </div>`;
   }).join('')+'</div>';
 
-  // Bannière "ta réponse"
-  const myAnsBanner=playerMyAns
-    ? `<div class="suspense-myans-banner" style="background:${BG[playerMyAns]}22;border:2px solid ${BG[playerMyAns]}66;color:${BG[playerMyAns]};">
-        <span style="font-size:28px;">${playerMyAns}</span>
-        <span>Tu as répondu <strong>${playerMyAns}</strong></span>
-       </div>`
-    : `<div class="suspense-myans-banner" style="background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);">
-        ⏰ Tu n'as pas répondu à temps
-       </div>`;
+  let battleBlock = '';
 
-  return `<div class="suspense-wrap">
-    <div class="suspense-title">${phrase}</div>
-    <div class="suspense-dots"><div class="suspense-dot"></div><div class="suspense-dot"></div><div class="suspense-dot"></div></div>
-    ${myAnsBanner}
-    <div class="suspense-camps">${campsHTML}</div>
-    <div class="suspense-bars">
-      <div style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px;">📊 Répartition des votes</div>
-      ${barsHTML}
-    </div>
-  </div>`;
+  if(isBattle){
+    const phrase=BATTLE_PHRASES[Math.floor(Math.random()*BATTLE_PHRASES.length)];
+
+    if(activeCamps.length === 2){
+      // ── DUEL : 2 camps face à face
+      const [campL, campR] = activeCamps;
+      const playersL = byAnswer[campL]||[];
+      const playersR = byAnswer[campR]||[];
+      const avatarsL = playersL.map(n=>`<span class="battle-avatar" title="${n}">${avatarMap[n]||'👤'}</span>`).join('');
+      const avatarsR = playersR.map(n=>`<span class="battle-avatar" title="${n}">${avatarMap[n]||'👤'}</span>`).join('');
+      const isMineL = campL===playerMyAns, isMineR = campR===playerMyAns;
+
+      battleBlock = `
+        <div class="battle-arena">
+          <div class="battle-sides">
+            <div class="battle-side left" style="border-left:3px solid ${BG[campL]}66;padding-left:8px;border-radius:4px;">
+              <div class="battle-avatars-row${isMineL?' is-shaking':''}">${avatarsL}</div>
+              <div class="battle-label" style="color:${BG[campL]};">${campL}</div>
+              <div class="battle-label-name">${playersL.map(n=>n===myName?'toi !':n).join(', ')}</div>
+            </div>
+            <div class="battle-vs">
+              <div class="battle-sparks">⚡</div>
+              <div class="battle-vs-text">VS</div>
+              <div class="battle-sparks">⚡</div>
+            </div>
+            <div class="battle-side right" style="border-right:3px solid ${BG[campR]}66;padding-right:8px;border-radius:4px;">
+              <div class="battle-avatars-row${isMineR?' is-shaking':''}">${avatarsR}</div>
+              <div class="battle-label" style="color:${BG[campR]};">${campR}</div>
+              <div class="battle-label-name">${playersR.map(n=>n===myName?'toi !':n).join(', ')}</div>
+            </div>
+          </div>
+        </div>`;
+    } else {
+      // ── MULTI-CAMP : 3 ou 4 camps actifs
+      const phrase2=SUSPENSE_PHRASES[Math.floor(Math.random()*SUSPENSE_PHRASES.length)];
+      const miniCamps=activeCamps.map(l=>{
+        const ps=byAnswer[l]||[];
+        const avs=ps.map(n=>`<span title="${n}">${avatarMap[n]||'👤'}</span>`).join('');
+        return `<div class="battle-mini-camp">
+          <div class="battle-mini-label" style="color:${BG[l]};">${l}</div>
+          <div class="battle-mini-avatars">${avs}</div>
+        </div>`;
+      }).join('');
+      battleBlock=`<div class="battle-arena"><div class="battle-multi">${miniCamps}</div></div>`;
+    }
+
+    return `<div class="suspense-wrap">
+      <div class="suspense-title">${phrase}</div>
+      <div class="suspense-dots"><div class="suspense-dot"></div><div class="suspense-dot"></div><div class="suspense-dot"></div></div>
+      ${myAnsBanner}
+      ${battleBlock}
+      <div class="suspense-bars">
+        <div style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px;">📊 Répartition des votes</div>
+        ${barsHTML}
+      </div>
+    </div>`;
+
+  } else {
+    // ── Tout le monde a voté pareil (ou 1 seul votant) → suspense classique
+    const phrase=SUSPENSE_PHRASES[Math.floor(Math.random()*SUSPENSE_PHRASES.length)];
+    const campsHTML=['A','B','C','D'].map(l=>{
+      const ps=byAnswer[l]||[];
+      const count=ps.length;
+      const isEmpty=count===0;
+      const isMine=l===playerMyAns;
+      const avatarsHTML=ps.map((n,idx)=>{
+        const av=avatarMap[n]||'👤';
+        const isMe=n===myName;
+        return `<span class="suspense-avatar${isMe?' is-mine':''}" style="animation-delay:${idx*.08}s;" title="${n}">${av}</span>`;
+      }).join('');
+      const pct=Math.round((dist[l]||0)/total*100);
+      return `<div class="suspense-camp${isEmpty?' empty':' has-players'}${isMine?' mine':''}" style="background:${BG[l]}22;">
+        <span class="suspense-camp-letter" style="color:${BG[l]};">${l}</span>
+        <div class="suspense-camp-avatars">${isEmpty?'<span style="font-size:20px;opacity:.3;">—</span>':avatarsHTML}</div>
+        <div class="suspense-count" style="color:${BG[l]};">${count} joueur${count>1?'s':''} · ${pct}%</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="suspense-wrap">
+      <div class="suspense-title">${phrase}</div>
+      <div class="suspense-dots"><div class="suspense-dot"></div><div class="suspense-dot"></div><div class="suspense-dot"></div></div>
+      ${myAnsBanner}
+      <div class="suspense-camps">${campsHTML}</div>
+      <div class="suspense-bars">
+        <div style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px;">📊 Répartition des votes</div>
+        ${barsHTML}
+      </div>
+    </div>`;
+  }
 }
 
 // ════════════════════════════════════════════════════════════
