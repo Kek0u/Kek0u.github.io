@@ -302,6 +302,46 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
 .suspense-count{font-size:12px;font-weight:800;margin-top:5px;opacity:.6;}
 .suspense-myans-banner{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 18px;border-radius:14px;font-weight:900;font-size:15px;animation:suspensePulse 1.6s ease-in-out infinite;width:100%;}
 .suspense-bars{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 14px;}
+
+/* ══ BONNE RÉPONSE — ANIMATION ══════════════════════════════ */
+@keyframes winnerPop{0%{transform:scale(1)}40%{transform:scale(1.35)}70%{transform:scale(.92)}100%{transform:scale(1)}}
+@keyframes winnerGlow{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 3px rgba(6,214,160,.8),0 0 16px rgba(6,214,160,.5)}}
+@keyframes playerBounce{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(-18px) scale(1.15)}65%{transform:translateY(-8px) scale(1.05)}}
+@keyframes correctFlash{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.2)}100%{opacity:1;transform:scale(1)}}
+.ans-player-chip.winner{background:rgba(6,214,160,.3);border:1px solid rgba(6,214,160,.7);color:#06d6a0;animation:winnerPop .4s cubic-bezier(.34,1.56,.64,1) forwards,winnerGlow 1s ease-in-out .4s 2;}
+.ok-avatar-big{font-size:80px;animation:playerBounce .7s cubic-bezier(.34,1.56,.64,1) forwards;display:block;text-align:center;filter:drop-shadow(0 8px 20px rgba(6,214,160,.6));}
+
+/* ══ HISTORIQUE DE MANCHE ════════════════════════════════════ */
+.hist-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;color:rgba(255,255,255,.55);font-family:var(--f);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;padding:4px 0;-webkit-tap-highlight-color:transparent;}
+.hist-toggle:hover{color:rgba(255,255,255,.8);}
+.hist-list{margin-top:8px;display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto;}
+.hist-row{display:flex;align-items:center;gap:8px;font-size:12px;padding:6px 8px;border-radius:10px;background:rgba(255,255,255,.05);}
+.hist-q{font-family:var(--ft);font-size:13px;color:rgba(255,255,255,.4);width:24px;flex-shrink:0;}
+.hist-correct{font-family:var(--ft);font-size:16px;font-weight:900;width:18px;flex-shrink:0;}
+.hist-score{color:rgba(255,255,255,.5);font-size:11px;flex:1;}
+.hist-fastest{font-size:11px;color:rgba(255,210,0,.7);}
+
+/* ══ MODE ÉQUIPES ════════════════════════════════════════════ */
+.team-toggle-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:14px;border:2px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);font-family:var(--f);font-size:14px;font-weight:900;cursor:pointer;width:100%;margin-bottom:10px;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.team-toggle-btn.active{background:rgba(255,100,100,.15);border-color:rgba(255,100,100,.5);color:#ff8080;}
+.team-assign-grid{display:flex;flex-direction:column;gap:10px;width:100%;max-height:55vh;overflow-y:auto;}
+.team-assign-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.06);border-radius:14px;}
+.team-assign-name{flex:1;font-size:14px;font-weight:800;display:flex;align-items:center;gap:6px;}
+.team-btn{padding:8px 14px;border:none;border-radius:10px;font-size:13px;font-weight:900;cursor:pointer;font-family:var(--f);transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.team-btn.rouge{background:rgba(255,80,80,.25);color:#ff8080;border:2px solid transparent;}
+.team-btn.bleu{background:rgba(80,160,255,.25);color:#80b4ff;border:2px solid transparent;}
+.team-btn.active-rouge{background:rgba(255,80,80,.5);color:#fff;border:2px solid #ff8080;}
+.team-btn.active-bleu{background:rgba(80,160,255,.5);color:#fff;border:2px solid #80b4ff;}
+.team-score-bar{display:flex;gap:0;border-radius:12px;overflow:hidden;margin-bottom:8px;height:36px;}
+.team-score-seg{flex:1;display:flex;align-items:center;justify-content:center;font-family:var(--ft);font-size:15px;font-weight:900;transition:flex .6s cubic-bezier(.34,1.56,.64,1);}
+.team-tag-rouge{display:inline-block;background:rgba(255,80,80,.25);color:#ff8080;border:1px solid rgba(255,80,80,.4);border-radius:8px;padding:1px 7px;font-size:11px;font-weight:800;margin-left:4px;}
+.team-tag-bleu{display:inline-block;background:rgba(80,160,255,.25);color:#80b4ff;border:1px solid rgba(80,160,255,.4);border-radius:8px;padding:1px 7px;font-size:11px;font-weight:800;margin-left:4px;}
+
+/* ══ SAUVEGARDE — BOUTON REPRENDRE ══════════════════════════ */
+.resume-btn{display:flex;align-items:center;gap:10px;padding:14px 18px;border-radius:16px;background:rgba(6,214,160,.12);border:2px solid rgba(6,214,160,.4);color:#06d6a0;font-family:var(--f);font-size:14px;font-weight:900;cursor:pointer;width:100%;margin-bottom:12px;-webkit-tap-highlight-color:transparent;transition:all .15s;}
+.resume-btn:hover{background:rgba(6,214,160,.2);}
+.resume-btn:active{transform:scale(.97);}
+.resume-info{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px;font-weight:700;}
 </style>
 </head>
 <body>
@@ -318,6 +358,16 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
 <!-- ══ LANDING ════════════════════════════════════════════════ -->
 <div id="s-land" class="screen center">
   <div class="card">
+    <!-- Bouton reprendre (si sauvegarde) -->
+    <div id="resume-wrap" style="display:none;">
+      <button class="resume-btn" onclick="resumeGame()">
+        <span style="font-size:28px;">▶️</span>
+        <div style="text-align:left;">
+          <div>Reprendre la partie</div>
+          <div class="resume-info" id="resume-info">…</div>
+        </div>
+      </button>
+    </div>
     <div style="font-size:52px;margin-bottom:10px;">🎬</div>
     <h1 style="font-family:var(--ft);font-size:34px;color:var(--gold);margin-bottom:6px;">QUIZ FAMILLE</h1>
     <p style="color:rgba(255,255,255,.55);font-size:14px;margin-bottom:28px;">Jouez ensemble devant la télé !</p>
@@ -368,6 +418,20 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
     </div>
     <div id="h-status" style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:16px;"></div>
     <button class="btn btn-h" onclick="goGame()">🎯 DÉMARRER LA PARTIE</button>
+    <button class="team-toggle-btn" id="team-toggle-btn" onclick="toggleTeamsMode()">⚔️ Mode équipes (désactivé)</button>
+  </div>
+</div>
+
+<!-- ══ HÔTE ÉQUIPES ════════════════════════════════════════════ -->
+<div id="s-hteams" class="screen center">
+  <div class="card" style="max-width:460px;">
+    <div style="font-family:var(--ft);font-size:24px;color:var(--gold);margin-bottom:6px;">⚔️ Composition des équipes</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:18px;">Assignez chaque joueur à une équipe</div>
+    <div class="team-assign-grid" id="team-assign-grid"></div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn btn-g" style="flex:1;margin-bottom:0;" onclick="goScreen('s-hwait')">← Retour</button>
+      <button class="btn btn-h" style="flex:2;margin-bottom:0;" onclick="startWithTeams()">C'est parti ! 🚀</button>
+    </div>
   </div>
 </div>
 
@@ -449,8 +513,23 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
     </div>
     <!-- Classement -->
     <div class="panel">
+      <!-- Scores par équipes (mode équipes) -->
+      <div id="h-team-bar" style="display:none;margin-bottom:10px;">
+        <div class="team-score-bar" id="h-team-score-bar">
+          <div class="team-score-seg" id="tseg-R" style="background:rgba(255,80,80,.4);">🔴 0</div>
+          <div class="team-score-seg" id="tseg-B" style="background:rgba(80,160,255,.4);">🔵 0</div>
+        </div>
+      </div>
       <h3 style="font-family:var(--ft);color:var(--gold);text-align:center;margin-bottom:14px;font-size:22px;">🏆 Classement</h3>
       <div id="h-scores"><span style="color:rgba(255,255,255,.3);font-size:14px;">En attente…</span></div>
+    </div>
+    <!-- Historique des manches -->
+    <div class="panel" id="h-hist-panel" style="display:none;">
+      <button class="hist-toggle" onclick="toggleHistory()">
+        <span>📋 HISTORIQUE</span>
+        <span id="hist-arrow">▼</span>
+      </button>
+      <div class="hist-list" id="h-hist-list" style="display:none;"></div>
     </div>
   </div>
 </div>
@@ -607,7 +686,7 @@ function loadPeerJS(urls, idx) {
           toast('📱 Code '+urlCode.toUpperCase()+' pré-rempli !', 3000);
         }
       } else {
-        const sess=loadSession(); if(sess) autoReconnect(sess); else goScreen('s-land');
+        const sess=loadSession(); if(sess) autoReconnect(sess); else { goScreen('s-land'); checkResume(); }
       }
     } else loadPeerJS(urls,idx+1);
   };
@@ -735,6 +814,10 @@ let answerTimes={}, totalAnswerTimes={}, currentStreaks={}, bestStreaks={}, chan
 let prevRankOrder={}, questionStartTime=0;
 let prevVoteNb=0, prevDist={A:0,B:0,C:0,D:0};
 let answeredOrder=[]; // ordre d'arrivée des réponses (noms)
+let questionHistory=[]; // historique des manches [{q,correct,correctCount,total,fastest}]
+let lastCorrectCount={}; // nb de fois dernier correct par joueur
+// Mode équipes
+let teamsMode=false, teams={}, teamScores={R:0,B:0};
 
 // ── Stabilité
 let _stopCalled=false;       // garde contre double stopQ()
@@ -847,6 +930,91 @@ function saveSession(){
 function clearSession(){
   try{ sessionStorage.removeItem('qf_sess'); }catch(e){}
   try{ localStorage.removeItem('qf_sess'); }catch(e){}
+}
+
+// ════════════════════════════════════════════════════════════
+// SAUVEGARDE DE PARTIE — localStorage
+// ════════════════════════════════════════════════════════════
+function saveGameState(){
+  if(!isHost) return;
+  try{
+    const data={
+      players:{...players}, playerAvatars:{...playerAvatars},
+      round, roomCode, myName, myAvatar,
+      correctByPlayer:{...correctByPlayer},
+      totalAnswerTimes:{...totalAnswerTimes},
+      currentStreaks:{...currentStreaks}, bestStreaks:{...bestStreaks},
+      changeCount:{...changeCount}, prevRankOrder:{...prevRankOrder},
+      lastCorrectCount:{...lastCorrectCount},
+      questionHistory:[...questionHistory],
+      teamsMode, teams:{...teams}, teamScores:{...teamScores},
+      savedAt:Date.now()
+    };
+    localStorage.setItem('qf_game',JSON.stringify(data));
+  }catch(e){}
+}
+function clearGameState(){
+  try{ localStorage.removeItem('qf_game'); }catch(e){}
+}
+function loadGameState(){
+  try{ const s=localStorage.getItem('qf_game'); return s?JSON.parse(s):null; }catch(e){return null;}
+}
+function checkResume(){
+  const save=loadGameState();
+  if(!save) return;
+  const ago=Math.round((Date.now()-save.savedAt)/60000);
+  const names=Object.keys(save.players).filter(n=>n!==save.myName);
+  const wrap=document.getElementById('resume-wrap');
+  const info=document.getElementById('resume-info');
+  if(wrap){ wrap.style.display=''; }
+  if(info){ info.textContent=`Q${save.round} jouées · ${names.length} joueur${names.length>1?'s':''} · il y a ${ago<1?'<1':ago} min`; }
+}
+function resumeGame(){
+  const save=loadGameState();
+  if(!save){ toast('❌ Sauvegarde introuvable.'); return; }
+  // Restaurer l'état
+  myName=save.myName; myAvatar=save.myAvatar; roomCode=save.roomCode;
+  isHost=true;
+  players=save.players; playerAvatars=save.playerAvatars;
+  round=save.round; correctByPlayer=save.correctByPlayer||{};
+  totalAnswerTimes=save.totalAnswerTimes||{}; currentStreaks=save.currentStreaks||{};
+  bestStreaks=save.bestStreaks||{}; changeCount=save.changeCount||{};
+  prevRankOrder=save.prevRankOrder||{}; lastCorrectCount=save.lastCorrectCount||{};
+  questionHistory=save.questionHistory||[];
+  teamsMode=save.teamsMode||false; teams=save.teams||{}; teamScores=save.teamScores||{R:0,B:0};
+  // Recréer le salon
+  document.getElementById('h-host-name').textContent=myAvatar+' '+myName;
+  document.getElementById('h-qnum').textContent='Q'+round;
+  document.getElementById('h-tnum').textContent='–';
+  document.getElementById('h-cnt').textContent='En attente…';
+  document.getElementById('btn-nx').textContent='⏭ QUESTION SUIVANTE';
+  updateWWTBAMTimer('h-svg',TIMER_SEC,TIMER_SEC);
+  renderScores(); renderHistPanel();
+  if(teamsMode) renderTeamBar();
+  saveSession();
+  // Recréer le Peer avec le même code
+  document.getElementById('d-code').textContent=roomCode;
+  generateQR(roomCode);
+  goScreen('s-hwait');
+  requestWakeLock();
+  createPeer('QF2026-'+roomCode,0,(p)=>{
+    peer=p;
+    document.getElementById('h-status').textContent='✅ En attente des joueurs';
+    toast('✅ Salon recréé ! Les joueurs peuvent rejoindre.',4000);
+    p.on('connection',conn=>{
+      conn.on('open',()=>{
+        conn.on('data',d=>onHostReceive(conn,d));
+        conn.on('close',()=>onPlayerDisconnect(conn));
+        const takenNames=Object.keys(players).filter(n=>n!==myName);
+        const takenAvatars=Object.entries(playerAvatars).filter(([n])=>n!==myName).map(([,a])=>a);
+        conn.send({type:'takenlist',names:takenNames,avatars:takenAvatars});
+      });
+      playerConns.push(conn);
+    });
+  },(err)=>{
+    if(err==='id-taken'){ roomCode=genCode(); document.getElementById('d-code').textContent=roomCode; resumeGame(); }
+    else toast('❌ Impossible de créer le salon.');
+  });
 }
 function loadSession(){
   // Priorité sessionStorage (refresh) puis localStorage (reconnexion longue)
@@ -1297,9 +1465,96 @@ function renderPills(){
 
 function goGame(){
   if(Object.keys(players).length<=1){toast('⚠️ Attendez au moins 1 joueur !');return;}
-  broadcast({type:'start'}); goScreen('s-hgame');
+  if(teamsMode){
+    renderTeamAssign();
+    goScreen('s-hteams');
+  } else {
+    broadcast({type:'start',teams:{},teamsMode:false});
+    goScreen('s-hgame');
+    requestWakeLock();
+    startHeartbeat();
+  }
+}
+
+function toggleTeamsMode(){
+  teamsMode=!teamsMode;
+  const btn=document.getElementById('team-toggle-btn');
+  btn.textContent=teamsMode?'⚔️ Mode équipes (activé)':'⚔️ Mode équipes (désactivé)';
+  btn.classList.toggle('active',teamsMode);
+}
+
+function renderTeamAssign(){
+  const grid=document.getElementById('team-assign-grid');
+  const nonHost=Object.keys(players).filter(n=>n!==myName);
+  // Auto-assign si vide
+  if(nonHost.length>0 && Object.keys(teams).length===0){
+    nonHost.forEach((n,i)=>{ teams[n]=i%2===0?'R':'B'; });
+    teams[myName]='R';
+  }
+  grid.innerHTML=[myName,...nonHost].map(n=>{
+    const t=teams[n]||'R';
+    return `<div class="team-assign-row">
+      <div class="team-assign-name">${playerAvatars[n]||'👤'} ${n}${n===myName?' 👑':''}</div>
+      <button class="team-btn rouge${t==='R'?' active-rouge':''}" onclick="setTeam('${n.replace(/'/g,"\\'")}','R')">🔴 Rouge</button>
+      <button class="team-btn bleu${t==='B'?' active-bleu':''}" onclick="setTeam('${n.replace(/'/g,"\\'")}','B')">🔵 Bleu</button>
+    </div>`;
+  }).join('');
+}
+
+function setTeam(name, team){
+  teams[name]=team;
+  renderTeamAssign();
+}
+
+function startWithTeams(){
+  // Vérifier au moins 1 joueur par équipe
+  const reds=Object.values(teams).filter(t=>t==='R').length;
+  const blues=Object.values(teams).filter(t=>t==='B').length;
+  if(reds===0||blues===0){ toast('⚠️ Chaque équipe doit avoir au moins 1 joueur !'); return; }
+  teamScores={R:0,B:0};
+  broadcast({type:'start',teams:{...teams},teamsMode:true});
+  goScreen('s-hgame');
   requestWakeLock();
   startHeartbeat();
+  document.getElementById('h-team-bar').style.display='';
+  renderTeamBar();
+}
+
+function renderTeamBar(){
+  const R=teamScores.R||0, B=teamScores.B||0;
+  const total=R+B||1;
+  const rPct=Math.round(R/total*100);
+  const bPct=100-rPct;
+  const segR=document.getElementById('tseg-R');
+  const segB=document.getElementById('tseg-B');
+  if(segR){ segR.style.flex=String(Math.max(rPct,5)); segR.textContent=`🔴 ${R}`; }
+  if(segB){ segB.style.flex=String(Math.max(bPct,5)); segB.textContent=`🔵 ${B}`; }
+}
+
+function toggleHistory(){
+  const list=document.getElementById('h-hist-list');
+  const arrow=document.getElementById('hist-arrow');
+  const open=list.style.display==='none';
+  list.style.display=open?'':'none';
+  if(arrow) arrow.textContent=open?'▲':'▼';
+}
+
+function renderHistPanel(){
+  if(questionHistory.length===0) return;
+  const panel=document.getElementById('h-hist-panel');
+  const list=document.getElementById('h-hist-list');
+  if(panel) panel.style.display='';
+  if(!list) return;
+  list.innerHTML=questionHistory.map(h=>{
+    const col=BG[h.correct]||'#fff';
+    const fastTxt=h.fastest?(playerAvatars[h.fastest]||'')+'⚡':'';
+    return `<div class="hist-row">
+      <span class="hist-q">Q${h.q}</span>
+      <span class="hist-correct" style="color:${col};">${h.correct}</span>
+      <span class="hist-score">${h.correctCount}/${h.total} corrects</span>
+      <span class="hist-fastest">${fastTxt}</span>
+    </div>`;
+  }).reverse().join('');
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1330,11 +1585,11 @@ function startQuestion(){
   ['A','B','C','D'].forEach(l=>{const b=document.getElementById('ha-'+l);b.disabled=false;b.className='habtn';b.style.background=BG[l];b.style.opacity='1';});
   const total=Object.keys(players).length;
   document.getElementById('h-cnt').textContent=`0 / ${total} ont répondu`;
-  broadcast({type:'question',num:round}); vib(200);
   clearInterval(timerIv);
   // Horloge murale → anti-dérive
   _qEndTime=Date.now()+TIMER_SEC*1000;
   _pauseRemaining=0;
+  broadcast({type:'question',num:round,endTime:_qEndTime}); vib(200);
   timerIv=setInterval(()=>{
     if(paused) return;
     timeLeft=Math.max(0,Math.round((_qEndTime-Date.now())/1000));
@@ -1441,8 +1696,31 @@ function validateAns(correct){
   Object.entries(answerTimes).forEach(([n,tLeft])=>{ responseTimes[n]=TIMER_SEC-tLeft; });
 
   renderScores();
-  broadcast({type:'result',correct,scores:players,dist,avatars:playerAvatars,byAnswer,questionFastest,responseTimes,totalAnswerTimes:{...totalAnswerTimes}});
+  broadcast({type:'result',correct,scores:players,dist,avatars:playerAvatars,byAnswer,questionFastest,responseTimes,totalAnswerTimes:{...totalAnswerTimes},teams:{...teams},teamsMode});
   document.getElementById('h-valid').style.display='none';
+
+  // ── 🐢 Le lent : dernier correct (parmi ≥2 corrects)
+  const correctAnswerers=Object.entries(answers).filter(([n,a])=>a===correct).map(([n])=>n);
+  if(correctAnswerers.length>=2){
+    const lastC=correctAnswerers.reduce((s,n)=>(answerTimes[n]||0)<(answerTimes[s]||0)?n:s);
+    lastCorrectCount[lastC]=(lastCorrectCount[lastC]||0)+1;
+  }
+
+  // ── Historique de manche
+  questionHistory.push({q:round,correct,correctCount:(byAnswer[correct]||[]).length,total:Object.keys(answers).length,fastest:questionFastest});
+  renderHistPanel();
+
+  // ── Scores équipes
+  if(teamsMode){
+    teamScores={R:0,B:0};
+    Object.entries(players).forEach(([n,pts])=>{
+      const t=teams[n]; if(t) teamScores[t]=(teamScores[t]||0)+pts;
+    });
+    renderTeamBar();
+  }
+
+  // ── Sauvegarde automatique
+  saveGameState();
   // Afficher les barres résultat avec surbrillance + noms joueurs
   const barsEl=document.getElementById('h-result-bars');
   barsEl.style.display='';
@@ -1454,7 +1732,7 @@ function validateAns(correct){
     const pct=Math.round(n/nb*100);
     const isOk=l===correct;
     const fillStyle=`width:${pct}%;background:${BG[l]};${isOk?'box-shadow:0 0 0 3px rgba(255,255,255,.7),0 0 16px '+BG[l]+';':''}`;
-    const playerChips=(byAnswer[l]||[]).map(pn=>`<span class="ans-player-chip">${playerAvatars[pn]||''} ${pn}</span>`).join('');
+    const playerChips=(byAnswer[l]||[]).map(pn=>`<span class="ans-player-chip${l===correct?' winner':''}">${playerAvatars[pn]||''} ${pn}</span>`).join('');
     return `<div class="vote-row" style="flex-wrap:wrap;height:auto;padding:4px 0;">
       <span class="vote-letter" style="color:${BG[l]}">${l}</span>
       <div class="vote-track" style="height:28px;">
@@ -1545,6 +1823,7 @@ function newGame(){
   clearInterval(timerIv); timerIv=null; paused=false;
   round=0; answers={}; hostAns=null; myAns=null; _stopCalled=false;
   correctByPlayer={}; answerTimes={}; totalAnswerTimes={}; currentStreaks={}; bestStreaks={}; changeCount={}; prevRankOrder={};
+  lastCorrectCount={}; questionHistory=[]; teamScores={R:0,B:0}; teams={};
   // Remettre les scores à zéro
   Object.keys(players).forEach(n=>players[n]=0);
   broadcast({type:'newgame'});
@@ -1561,14 +1840,18 @@ function newGame(){
   const pauseBtn=document.getElementById('btn-pause');
   pauseBtn.textContent='⏸ Pause';pauseBtn.style.background='';pauseBtn.style.color='';pauseBtn.style.borderColor='';
   renderScores();
+  document.getElementById('h-hist-panel').style.display='none';
+  clearGameState();
   toast('🔄 Nouvelle partie ! Scores remis à zéro.');
 }
 
 // ════════════════════════════════════════════════════════════
 // TITRES HONORIFIQUES — PALMARÈS FUN
 // ════════════════════════════════════════════════════════════
-// extraStats = tableau de {icon, label, valueHTML} à ajouter en bas du bloc
-function buildHonorTitles(scores, correct, totalRounds, fastestPlayer, streakPlayer, streakCount, changeCount, bestStreaks, speedMap, avatarMap, selfName, extraStats=[]){
+// extraStats = {extraStats:[{icon,label,valueHTML}], _lastCorrectCount:{}}
+function buildHonorTitles(scores, correct, totalRounds, fastestPlayer, streakPlayer, streakCount, changeCount, bestStreaks, speedMap, avatarMap, selfName, opts={}){
+  const extraStatRows = opts.extraStats||[];
+  const extLC = opts._lastCorrectCount||{};
   const playerNames=Object.keys(scores);
   const titles=[];
 
@@ -1604,10 +1887,19 @@ function buildHonorTitles(scores, correct, totalRounds, fastestPlayer, streakPla
     }
   }
 
+  // 🐢 Le lent (dernier à répondre correctement le plus souvent)
+  if(Object.keys(extLC).length>0){
+    let lentName='', lentMax=0;
+    Object.entries(extLC).forEach(([n,c])=>{ if(c>lentMax){lentMax=c;lentName=n;} });
+    if(lentName && lentMax>=2){
+      titles.push({emoji:'🐢',label:'Le lent mais sûr',name:lentName,av:avatarMap[lentName]||'',desc:`Dernier correct ${lentMax} fois… mais juste !`,color:'#a78bfa'});
+    }
+  }
+
   // Stats de bas de bloc fixes
   const bottomStats=[
     ...(totalRounds>0?[{icon:'🎮',label:'Questions jouées',valueHTML:`<strong>${totalRounds}</strong>`}]:[]),
-    ...extraStats
+    ...extraStatRows
   ];
 
   if(titles.length===0 && bottomStats.length===0) return '';
@@ -1662,9 +1954,11 @@ function endGame(){
   Object.entries(bestStreaks).forEach(([n,s])=>{if(s>streakCount){streakCount=s;streakPlayer=n;}});
   broadcast({type:'endgame', scores:players, correct:correctByPlayer, rounds:round,
     fastest:fastestPlayer, streakPlayer, streakCount, prevRanks:prevRankOrder, avatars:playerAvatars,
-    totalAnswerTimes:{...totalAnswerTimes}, changeCount:{...changeCount}, bestStreaks:{...bestStreaks}});
+    totalAnswerTimes:{...totalAnswerTimes}, changeCount:{...changeCount}, bestStreaks:{...bestStreaks},
+    lastCorrectCount:{...lastCorrectCount}, teams:{...teams}, teamsMode});
   releaseWakeLock();
   clearSession();
+  clearGameState();
   toast('🏁 Partie terminée !');
   showHostPodium(fastestPlayer, streakPlayer, streakCount);
 }
@@ -1728,7 +2022,7 @@ function showHostPodium(fastestPlayer='', streakPlayer='', streakCount=0){
   }).join('');
 
   // Bloc fusionné Palmarès & Stats
-  const statsHTML=buildHonorTitles(players,correctByPlayer,totalR,fastestPlayer,streakPlayer,streakCount,changeCount,bestStreaks,totalAnswerTimes,playerAvatars,myName);
+  const statsHTML=buildHonorTitles(players,correctByPlayer,totalR,fastestPlayer,streakPlayer,streakCount,changeCount,bestStreaks,totalAnswerTimes,playerAvatars,myName,{_lastCorrectCount:{...lastCorrectCount}});
 
   cont.innerHTML=`
     <!-- Titre -->
@@ -1764,6 +2058,7 @@ function hostRestartFromPodium(){
   Object.keys(players).forEach(n=>players[n]=0);
   round=0; answers={}; hostAns=null; myAns=null;
   correctByPlayer={}; answerTimes={}; totalAnswerTimes={}; currentStreaks={}; bestStreaks={}; changeCount={}; prevRankOrder={}; _stopCalled=false;
+  lastCorrectCount={}; questionHistory={}; teamScores={R:0,B:0};
   broadcast({type:'newgame'});
   goScreen('s-hgame');
   startHeartbeat();
@@ -1776,7 +2071,9 @@ function hostRestartFromPodium(){
   document.getElementById('h-cnt').textContent='En attente…';
   document.getElementById('btn-nx').style.display='';
   document.getElementById('btn-nx').textContent='🚀 LANCER LA QUESTION';
-  const pauseBtn=document.getElementById('btn-pause');
+  renderScores();
+  document.getElementById('h-hist-panel').style.display='none';
+  clearGameState();
   pauseBtn.textContent='⏸ Pause';pauseBtn.style.background='';pauseBtn.style.color='';pauseBtn.style.borderColor='';
   renderScores();
   toast('🔄 Nouvelle partie ! Scores remis à zéro.');
@@ -1879,7 +2176,7 @@ function onPlayerReceive(data){
         document.getElementById('p-result').style.display='none';
         document.getElementById('p-scores-wrap').style.display='none';
         document.getElementById('p-progress-wrap').style.display='';
-        startPTimer(data.timeLeft);
+        startPTimer(data.timeLeft, data.endTime||null);
       } else {
         document.getElementById('p-msg').innerHTML='✅ Reconnecté !<br><span style="font-size:16px;color:rgba(255,255,255,.5);">En attente de la prochaine question…</span>';
         document.getElementById('p-grid').style.display='none';
@@ -1890,6 +2187,10 @@ function onPlayerReceive(data){
   if(type==='start'){
     goScreen('s-pgame');
     document.getElementById('p-name').textContent=myAvatar+' '+myName;
+    // Afficher le tag équipe si mode équipes
+    const myTeam=(data.teams||{})[myName];
+    const teamTag=myTeam?`<span class="team-tag-${myTeam==='R'?'rouge':'bleu'}">${myTeam==='R'?'🔴 Rouge':'🔵 Bleu'}</span>`:'';
+    document.getElementById('p-name').innerHTML=myAvatar+' '+myName+teamTag;
     document.getElementById('p-msg').innerHTML='🎬 La partie commence !<br><span style="font-size:16px;color:rgba(255,255,255,.5);">Prépare-toi…</span>';
     startPlayerHeartbeat();
   }
@@ -1937,7 +2238,7 @@ function onPlayerReceive(data){
     ['A','B','C','D'].forEach(l=>{const b=document.getElementById('pb-'+l);if(b){b.disabled=false;b.className='bab';b.style.background=BG[l];}});
     document.getElementById('p-msg').textContent='❓ Choisis vite !';
     document.getElementById('p-grid').style.display='grid';
-    vib([200,50,200]); startPTimer(TIMER_SEC);
+    vib([200,50,200]); startPTimer(TIMER_SEC, data.endTime);
   }
 
   if(type==='anscnt'){
@@ -2056,7 +2357,7 @@ function onPlayerReceive(data){
     if(isOk){plusBadge(myScore-prev);vib([100,30,100,30,200]);beep(880,120);}else vib(300);
     let html='';
     if(!myAns) html=`<div class="result-box result-none"><div style="font-size:48px;margin-bottom:10px;">⏰</div><div style="font-size:20px;font-weight:900;">Pas de réponse !</div>${correct?`<div style="margin-top:10px;color:rgba(255,255,255,.6);">Bonne réponse : <span style="display:inline-block;background:${BG[correct]};padding:4px 14px;border-radius:10px;font-family:var(--ft);font-size:22px;font-weight:900;">${correct}</span></div>`:''}</div>`;
-    else if(isOk) html=`<div class="result-box result-ok"><div style="font-size:52px;margin-bottom:8px;">🎉</div><div style="font-size:22px;font-weight:900;color:#06d6a0;">BONNE RÉPONSE !</div><div style="font-size:60px;font-family:var(--ft);margin:10px 0;background:${BG[correct]};display:inline-block;width:70px;height:70px;border-radius:16px;line-height:70px;">${correct}</div></div>`;
+    else if(isOk) html=`<div class="result-box result-ok"><span class="ok-avatar-big">${myAvatar}</span><div style="font-size:22px;font-weight:900;color:#06d6a0;margin-top:6px;">BONNE RÉPONSE !</div><div style="font-size:60px;font-family:var(--ft);margin:10px 0;background:${BG[correct]};display:inline-block;width:70px;height:70px;border-radius:16px;line-height:70px;">${correct}</div></div>`;
     else html=`<div class="result-box result-ko"><div style="font-size:52px;margin-bottom:8px;">😬</div><div style="font-size:22px;font-weight:900;color:#e84393;">RATÉ !</div><div style="margin-top:10px;font-size:15px;color:rgba(255,255,255,.7);">Ta réponse : <span style="background:${BG[myAns]};padding:3px 12px;border-radius:8px;font-family:var(--ft);font-size:20px;">${myAns}</span> &nbsp; Bonne : <span style="background:${BG[correct]};padding:3px 12px;border-radius:8px;font-family:var(--ft);font-size:20px;">${correct}</span></div></div>`;
     // Badge plus rapide
     const fastestBadge=questionFastest?`<div class="fastest-q-badge">⚡ Plus rapide : <strong>${remoteAvatars[questionFastest]||''} ${questionFastest}${questionFastest===myName?' 👈 toi !':''}</strong></div>`:'';
@@ -2111,7 +2412,8 @@ function onPlayerReceive(data){
     stopPlayerHeartbeat();
     showEndGame(data.scores||{}, data.correct||{}, data.rounds||round,
       data.fastest||'', data.streakPlayer||'', data.streakCount||0, data.prevRanks||{}, data.avatars||playerAvatars,
-      data.totalAnswerTimes||{}, data.changeCount||{}, data.bestStreaks||{});
+      data.totalAnswerTimes||{}, data.changeCount||{}, data.bestStreaks||{},
+      data.lastCorrectCount||{}, data.teams||{}, data.teamsMode||false);
   }
 
   if(type==='kicked'){
@@ -2141,7 +2443,7 @@ function onPlayerReceive(data){
 // ════════════════════════════════════════════════════════════
 // JOUEUR — ÉCRAN FIN DE PARTIE
 // ════════════════════════════════════════════════════════════
-function showEndGame(scores, correct={}, totalRounds, fastestPlayer='', streakPlayer='', streakCount=0, prevRanks={}, remoteAvatarMap={}, speedMap={}, remoteChangeCount={}, remoteBestStreaks={}){
+function showEndGame(scores, correct={}, totalRounds, fastestPlayer='', streakPlayer='', streakCount=0, prevRanks={}, remoteAvatarMap={}, speedMap={}, remoteChangeCount={}, remoteBestStreaks={}, remoteLCC={}, remoteTeams={}, remoteTeamsMode=false){
   if(!totalRounds) totalRounds=round;
   clearInterval(ptIv); ptIv=null;
   clearSession();
@@ -2190,7 +2492,7 @@ function showEndGame(scores, correct={}, totalRounds, fastestPlayer='', streakPl
   // Bloc fusionné Palmarès & Stats (avec réussite personnelle en extra)
   const myRateColor=myRate>=70?'#06d6a0':myRate>=40?'#f7971e':'#e84393';
   const extraStats=totalRounds>0?[{icon:'📊',label:'Ta réussite',valueHTML:`<span style="color:${myRateColor};font-weight:900;">${myCorrect}/${totalRounds} — ${myRate}%</span>`}]:[];
-  const statsHTML=buildHonorTitles(scores,correct,totalRounds,fastestPlayer,streakPlayer,streakCount,remoteChangeCount,remoteBestStreaks,speedMap,avatarMap,myName,extraStats);
+  const statsHTML=buildHonorTitles(scores,correct,totalRounds,fastestPlayer,streakPlayer,streakCount,remoteChangeCount,remoteBestStreaks,speedMap,avatarMap,myName,{extraStats,_lastCorrectCount:remoteLCC});
 
   cont.innerHTML=`
     <!-- Vainqueur (avatar géant) -->
@@ -2419,10 +2721,11 @@ function pSend(letter){
   document.getElementById('p-msg').innerHTML=`<span style="font-size:15px;color:rgba(255,255,255,.55);">Ta réponse :</span><br><span style="font-size:60px;font-family:var(--ft);color:${BG[letter]};">${letter}</span><br><span class="change-hint">Touche une autre lettre pour changer</span>`;
 }
 
-function startPTimer(t){
+function startPTimer(totalSec, endTime){
   document.getElementById('p-timer-wrap').style.display='';
-  clearInterval(ptIv);let left=t;
-  const upd=()=>{
+  clearInterval(ptIv);
+  const _pEndTime = endTime || (Date.now() + totalSec*1000);
+  const upd=(left)=>{
     const col=left>10?'#06d6a0':left>5?'#f7971e':'#e84393';
     const num=document.getElementById('p-tnum');
     if(num){num.textContent=left;num.style.color=col;}
@@ -2430,8 +2733,13 @@ function startPTimer(t){
     document.getElementById('p-tring').classList.toggle('urgent',left<=5);
     if(left<=5&&left>0)vib(60);
   };
-  upd();
-  ptIv=setInterval(()=>{left--;upd();if(left<=0)clearInterval(ptIv);},1000);
+  const tick=()=>{
+    const left=Math.max(0,Math.round((_pEndTime-Date.now())/1000));
+    upd(left);
+    if(left<=0) clearInterval(ptIv);
+  };
+  tick();
+  ptIv=setInterval(tick,400);
 }
 
 document.addEventListener('keydown',e=>{
