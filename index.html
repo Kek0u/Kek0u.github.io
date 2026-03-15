@@ -795,10 +795,22 @@ function initAvatarGrid(gridId, defaultAvatar){
 
 function pickAvatar(gridId, emoji){
   const grid = document.getElementById(gridId);
+  // Bloquer si déjà pris par quelqu'un d'autre
+  const btn=grid.querySelector(`.avatar-btn[title="Déjà pris 🚫"]`);
+  const takenList=Object.entries(playerAvatars).filter(([n])=>n!==myName).map(([,a])=>a);
+  if(takenList.includes(emoji)){ toast('⚠️ Avatar déjà pris !'); return; }
   grid._selected = emoji;
+  myAvatar = emoji;
   grid.querySelectorAll('.avatar-btn').forEach(b=>{
     b.classList.toggle('picked', b.textContent.trim()===emoji);
   });
+  // Si hôte, broadcaster la mise à jour aux joueurs déjà connectés
+  if(isHost && playerConns.length>0){
+    playerAvatars[myName]=emoji;
+    refreshHostGrid();
+    const tv=Object.values(playerAvatars);
+    playerConns.forEach(c=>{ try{ if(c.open) c.send({type:'takenlist',names:Object.keys(players).filter(n=>n!==myName),avatars:tv}); }catch(e){} });
+  }
 }
 
 function getAvatar(gridId){ return document.getElementById(gridId)?._selected || AVATARS[0]; }
@@ -1048,7 +1060,7 @@ function resumeGame(){
         conn.on('data',d=>onHostReceive(conn,d));
         conn.on('close',()=>onPlayerDisconnect(conn));
         const takenNames=Object.keys(players).filter(n=>n!==myName);
-        const takenAvatars=Object.entries(playerAvatars).filter(([n])=>n!==myName).map(([,a])=>a);
+        const takenAvatars=Object.values(playerAvatars);
         conn.send({type:'takenlist',names:takenNames,avatars:takenAvatars});
       });
       playerConns.push(conn);
@@ -1129,16 +1141,23 @@ function fallbackToForm(){
 }
 
 function updateTakenAvatars(takenAvatars){
-  const grid=document.getElementById('player-avatar-grid');
-  if(!grid)return;
-  grid.querySelectorAll('.avatar-btn').forEach(b=>{
-    const emoji=b.textContent.trim();
-    const taken=takenAvatars.includes(emoji)&&emoji!==myAvatar;
-    b.disabled=taken;
-    b.style.opacity=taken?'0.25':'';
-    b.style.cursor=taken?'not-allowed':'';
-    b.title=taken?'Déjà pris 🚫':'';
+  ['player-avatar-grid','host-avatar-grid'].forEach(gridId=>{
+    const grid=document.getElementById(gridId);
+    if(!grid) return;
+    grid.querySelectorAll('.avatar-btn').forEach(b=>{
+      const emoji=b.textContent.trim();
+      const taken=takenAvatars.includes(emoji)&&emoji!==myAvatar;
+      b.disabled=taken;
+      b.style.opacity=taken?'0.22':'';
+      b.style.cursor=taken?'not-allowed':'';
+      b.title=taken?'Déjà pris 🚫':'';
+    });
   });
+}
+
+// Rafraîchir la grille hôte quand la composition des joueurs change
+function refreshHostGrid(){
+  updateTakenAvatars(Object.values(playerAvatars));
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1400,7 +1419,7 @@ function doHost() {
           conn.on('close',()=>onPlayerDisconnect(conn));
           // Envoyer immédiatement la liste des noms/avatars pris
           const takenNames=Object.keys(players).filter(n=>n!==myName);
-          const takenAvatars=Object.entries(playerAvatars).filter(([n])=>n!==myName).map(([,a])=>a);
+          const takenAvatars=Object.values(playerAvatars);
           conn.send({type:'takenlist',names:takenNames,avatars:takenAvatars});
         });
         playerConns.push(conn);
@@ -1437,12 +1456,13 @@ function onHostReceive(conn, data) {
     if(!isReconnect) players[name]=0;
     playerAvatars[name]=avatar;
     renderPills();
+    refreshHostGrid();
     toast(isReconnect?('🔄 '+name+' est de retour !'):(avatar+' '+name+' a rejoint !'));
     // Envoyer état actuel
     conn.send({type:'welcome',score:players[name]||0,isReconnect,round,phase:timerIv?'question':'waiting',timeLeft});
     // Mettre à jour la takenlist pour tous les autres
     const takenNames=Object.keys(players).filter(n=>n!==myName);
-    const takenAvatars=Object.entries(playerAvatars).filter(([n])=>n!==myName).map(([,a])=>a);
+    const takenAvatars=Object.values(playerAvatars);
     playerConns.forEach(c=>{ if(c.open&&c!==conn) c.send({type:'takenlist',names:takenNames,avatars:takenAvatars}); });
   }
   if(data.type==='ans'&&data.name){
@@ -2763,6 +2783,7 @@ function kickPlayer(name){
   delete bestStreaks[name];
   playerConns=playerConns.filter(c=>c._playerName!==name);
   renderScores();
+  refreshHostGrid();
   updateAnsCnt();
   toast('👢 '+name+' a été exclu de la partie.');
 }
