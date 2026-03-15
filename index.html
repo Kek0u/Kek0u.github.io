@@ -306,10 +306,31 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
 /* ══ BONNE RÉPONSE — ANIMATION ══════════════════════════════ */
 @keyframes winnerPop{0%{transform:scale(1)}40%{transform:scale(1.35)}70%{transform:scale(.92)}100%{transform:scale(1)}}
 @keyframes winnerGlow{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 3px rgba(6,214,160,.8),0 0 16px rgba(6,214,160,.5)}}
-@keyframes playerBounce{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(-18px) scale(1.15)}65%{transform:translateY(-8px) scale(1.05)}}
-@keyframes correctFlash{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.2)}100%{opacity:1;transform:scale(1)}}
+@keyframes playerBounce{0%{transform:translateY(0) scale(.5);opacity:0}50%{transform:translateY(-28px) scale(1.25);opacity:1}75%{transform:translateY(-10px) scale(1.05)}100%{transform:translateY(0) scale(1)}}
+@keyframes correctLetterPop{0%{transform:scale(0) rotate(-15deg);opacity:0}60%{transform:scale(1.3) rotate(4deg)}80%{transform:scale(.95) rotate(-2deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes correctTextSlide{0%{opacity:0;transform:translateY(12px) scale(.8)}60%{transform:translateY(-4px) scale(1.08)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes starBurst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)}}
 .ans-player-chip.winner{background:rgba(6,214,160,.3);border:1px solid rgba(6,214,160,.7);color:#06d6a0;animation:winnerPop .4s cubic-bezier(.34,1.56,.64,1) forwards,winnerGlow 1s ease-in-out .4s 2;}
-.ok-avatar-big{font-size:80px;animation:playerBounce .7s cubic-bezier(.34,1.56,.64,1) forwards;display:block;text-align:center;filter:drop-shadow(0 8px 20px rgba(6,214,160,.6));}
+.ok-avatar-big{font-size:80px;animation:playerBounce .65s cubic-bezier(.34,1.56,.64,1) forwards;display:block;text-align:center;filter:drop-shadow(0 8px 20px rgba(6,214,160,.6));}
+.ok-letter{display:inline-block;width:80px;height:80px;border-radius:20px;font-family:var(--ft);font-size:52px;line-height:80px;text-align:center;animation:correctLetterPop .55s cubic-bezier(.34,1.56,.64,1) .15s both;}
+.ok-text{font-size:26px;font-weight:900;color:#06d6a0;animation:correctTextSlide .4s ease .05s both;letter-spacing:1px;}
+.ok-stars{position:relative;height:0;overflow:visible;pointer-events:none;}
+.ok-star{position:absolute;font-size:22px;animation:starBurst .7s ease-out forwards;}
+
+/* ══ FLÈCHES CLASSEMENT ANIMÉES ═════════════════════════════ */
+@keyframes arrowUp{0%{opacity:0;transform:translateY(6px) scale(.6)}60%{transform:translateY(-3px) scale(1.3)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes arrowDown{0%{opacity:0;transform:translateY(-6px) scale(.6)}60%{transform:translateY(3px) scale(1.3)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes rankRowFlash{0%{background:transparent}30%{background:rgba(6,214,160,.18)}100%{background:transparent}}
+@keyframes rankRowFlashDown{0%{background:transparent}30%{background:rgba(232,67,147,.12)}100%{background:transparent}}
+.score-item{display:flex;justify-content:space-between;align-items:center;padding:12px 6px;border-bottom:1px solid rgba(255,255,255,.06);font-size:16px;font-weight:700;border-radius:8px;transition:background .3s;}
+.score-item:last-child{border-bottom:none;}
+.score-arrow{font-size:13px;font-weight:900;width:28px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;line-height:1;}
+.score-arrow.up{color:#06d6a0;text-shadow:0 0 8px rgba(6,214,160,.8);animation:arrowUp .4s cubic-bezier(.34,1.56,.64,1) forwards;}
+.score-arrow.down{color:#e84393;text-shadow:0 0 8px rgba(232,67,147,.8);animation:arrowDown .4s cubic-bezier(.34,1.56,.64,1) forwards;}
+.score-arrow.same{color:rgba(255,255,255,.2);}
+.score-arrow .arrow-delta{font-size:10px;font-weight:900;margin-top:1px;}
+.score-item.jumped{animation:rankRowFlash 1s ease forwards;}
+.score-item.dropped{animation:rankRowFlashDown 1s ease forwards;}
 
 /* ══ HISTORIQUE DE MANCHE ════════════════════════════════════ */
 .hist-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;color:rgba(255,255,255,.55);font-family:var(--f);font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;padding:4px 0;-webkit-tap-highlight-color:transparent;}
@@ -497,6 +518,8 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
       </div>
       <!-- Validation bonne réponse -->
       <div id="h-valid" style="display:none;margin-top:16px;">
+        <!-- Répartition des votes (même vue que les joueurs) -->
+        <div id="h-stop-suspense" style="margin-bottom:14px;"></div>
         <p style="font-weight:900;color:var(--gold);margin-bottom:10px;">✅ La bonne réponse est :</p>
         <div class="host-abcd">
           <button class="habtn" style="background:var(--A)" onclick="validateAns('A')">A</button>
@@ -1662,6 +1685,27 @@ function stopQ(){
   Object.entries(answers).forEach(([n,a])=>{ if(stopByAnswer[a]) stopByAnswer[a].push(n); });
   const stopDist=getDistribution();
   broadcast({type:'stop', byAnswer:stopByAnswer, dist:stopDist, avatars:playerAvatars});
+
+  // ── Vue suspense hôte (même répartition que les joueurs voient)
+  const hSusp=document.getElementById('h-stop-suspense');
+  if(hSusp){
+    const total=Object.values(stopDist).reduce((s,v)=>s+v,0)||1;
+    const campsHTML=['A','B','C','D'].map(l=>{
+      const ps=stopByAnswer[l];
+      const count=ps.length;
+      const pct=Math.round((stopDist[l]||0)/total*100);
+      const avatarChips=ps.map(n=>`<span title="${n}" style="font-size:22px;line-height:1;">${playerAvatars[n]||'👤'}</span>`).join('');
+      if(count===0) return '';
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);">
+        <span style="font-family:var(--ft);font-size:20px;font-weight:900;color:${BG[l]};width:22px;flex-shrink:0;">${l}</span>
+        <div style="display:flex;flex-wrap:wrap;gap:3px;flex:1;">${avatarChips}</div>
+        <span style="font-family:var(--ft);font-size:13px;color:${BG[l]};flex-shrink:0;">${count} · ${pct}%</span>
+      </div>`;
+    }).filter(Boolean).join('');
+    hSusp.innerHTML=campsHTML
+      ? `<div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 12px;">${campsHTML}</div>`
+      : '';
+  }
   vib([100,50,100]);
 }
 
@@ -1696,8 +1740,10 @@ function validateAns(correct){
   Object.entries(answerTimes).forEach(([n,tLeft])=>{ responseTimes[n]=TIMER_SEC-tLeft; });
 
   renderScores();
-  broadcast({type:'result',correct,scores:players,dist,avatars:playerAvatars,byAnswer,questionFastest,responseTimes,totalAnswerTimes:{...totalAnswerTimes},teams:{...teams},teamsMode});
+  broadcast({type:'result',correct,scores:players,dist,avatars:playerAvatars,byAnswer,questionFastest,responseTimes,totalAnswerTimes:{...totalAnswerTimes},teams:{...teams},teamsMode,prevRanks:{...prevRankOrder}});
   document.getElementById('h-valid').style.display='none';
+  const hSusp2=document.getElementById('h-stop-suspense');
+  if(hSusp2) hSusp2.innerHTML='';
 
   // ── 🐢 Le lent : dernier correct (parmi ≥2 corrects)
   const correctAnswerers=Object.entries(answers).filter(([n,a])=>a===correct).map(([n])=>n);
@@ -1787,12 +1833,25 @@ function buildRespTimeHTML(responseTimes, avatarMap, fastestName){
 function renderScores(){
   const box=document.getElementById('h-scores');
   const e=rankSort(Object.entries(players), totalAnswerTimes);
-  box.innerHTML=e.length===0
-    ?'<span style="color:rgba(255,255,255,.3);font-size:14px;">En attente…</span>'
-    :e.map(([n,pts],i)=>`<div class="score-item" ${n===myName?'style="background:rgba(255,210,0,.06);border-radius:10px;padding:12px 8px;"':''}>
-      <span>${MEDAL[i]||'  '} ${playerAvatars[n]||''} ${n}${n===myName?' 👈':''}</span>
+  if(e.length===0){ box.innerHTML='<span style="color:rgba(255,255,255,.3);font-size:14px;">En attente…</span>'; return; }
+  box.innerHTML=e.map(([n,pts],i)=>{
+    const prevR=prevRankOrder[n];
+    const moved = prevR!==undefined && prevR!==i;
+    const wentUp = prevR!==undefined && i<prevR;
+    const wentDown = prevR!==undefined && i>prevR;
+    const delta = prevR!==undefined ? Math.abs(prevR-i) : 0;
+    let arrowHTML='';
+    if(wentUp) arrowHTML=`<div class="score-arrow up">↑<div class="arrow-delta">${delta>1?'+'+delta:''}</div></div>`;
+    else if(wentDown) arrowHTML=`<div class="score-arrow down">↓<div class="arrow-delta">${delta>1?'-'+delta:''}</div></div>`;
+    else arrowHTML=`<div class="score-arrow same">·</div>`;
+    const rowClass=`score-item${wentUp?' jumped':wentDown?' dropped':''}${n===myName?' my-row':''}`;
+    const bg=n===myName?'background:rgba(255,210,0,.06);border-radius:10px;padding:12px 8px;':'';
+    return `<div class="${rowClass}" style="${bg}">
+      ${arrowHTML}
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${MEDAL[i]||'  '} ${playerAvatars[n]||''} ${n}${n===myName?' 👈':''}</span>
       <span class="score-pts">${pts}</span>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 // ════════════════════════════════════════════════════════════
@@ -2357,7 +2416,22 @@ function onPlayerReceive(data){
     if(isOk){plusBadge(myScore-prev);vib([100,30,100,30,200]);beep(880,120);}else vib(300);
     let html='';
     if(!myAns) html=`<div class="result-box result-none"><div style="font-size:48px;margin-bottom:10px;">⏰</div><div style="font-size:20px;font-weight:900;">Pas de réponse !</div>${correct?`<div style="margin-top:10px;color:rgba(255,255,255,.6);">Bonne réponse : <span style="display:inline-block;background:${BG[correct]};padding:4px 14px;border-radius:10px;font-family:var(--ft);font-size:22px;font-weight:900;">${correct}</span></div>`:''}</div>`;
-    else if(isOk) html=`<div class="result-box result-ok"><span class="ok-avatar-big">${myAvatar}</span><div style="font-size:22px;font-weight:900;color:#06d6a0;margin-top:6px;">BONNE RÉPONSE !</div><div style="font-size:60px;font-family:var(--ft);margin:10px 0;background:${BG[correct]};display:inline-block;width:70px;height:70px;border-radius:16px;line-height:70px;">${correct}</div></div>`;
+    else if(isOk){
+      const stars=['⭐','✨','🌟','💫','⚡'].map((s,i)=>{
+        const angle=(i/5)*Math.PI*2;
+        const dist=55+Math.random()*30;
+        const tx=Math.round(Math.cos(angle)*dist)+'px';
+        const ty=Math.round(Math.sin(angle)*dist-20)+'px';
+        const delay=(i*0.07).toFixed(2)+'s';
+        return `<span class="ok-star" style="left:50%;top:0;transform:translate(-50%,0);--tx:${tx};--ty:${ty};animation-delay:${delay};">${s}</span>`;
+      }).join('');
+      html=`<div class="result-box result-ok" style="position:relative;overflow:visible;">
+        <div class="ok-stars">${stars}</div>
+        <span class="ok-avatar-big">${myAvatar}</span>
+        <div class="ok-text">BONNE RÉPONSE !</div>
+        <div style="margin:12px 0;"><span class="ok-letter" style="background:${BG[correct]};color:#fff;">${correct}</span></div>
+      </div>`;
+    }
     else html=`<div class="result-box result-ko"><div style="font-size:52px;margin-bottom:8px;">😬</div><div style="font-size:22px;font-weight:900;color:#e84393;">RATÉ !</div><div style="margin-top:10px;font-size:15px;color:rgba(255,255,255,.7);">Ta réponse : <span style="background:${BG[myAns]};padding:3px 12px;border-radius:8px;font-family:var(--ft);font-size:20px;">${myAns}</span> &nbsp; Bonne : <span style="background:${BG[correct]};padding:3px 12px;border-radius:8px;font-family:var(--ft);font-size:20px;">${correct}</span></div></div>`;
     // Badge plus rapide
     const fastestBadge=questionFastest?`<div class="fastest-q-badge">⚡ Plus rapide : <strong>${remoteAvatars[questionFastest]||''} ${questionFastest}${questionFastest===myName?' 👈 toi !':''}</strong></div>`:'';
@@ -2397,13 +2471,26 @@ function onPlayerReceive(data){
     document.getElementById('p-msg').textContent='';
     // Classement avec tiebreaker vitesse
     const remoteSpeed=data.totalAnswerTimes||{};
+    const prevRanks=data.prevRanks||{};
     const entries=rankSort(Object.entries(scores), remoteSpeed);
     document.getElementById('p-scores').innerHTML=entries.map(([n,pts],i)=>{
+      const prevR=prevRanks[n];
+      const wentUp=prevR!==undefined && i<prevR;
+      const wentDown=prevR!==undefined && i>prevR;
+      const delta=prevR!==undefined?Math.abs(prevR-i):0;
+      let arrowHTML='';
+      if(wentUp) arrowHTML=`<div class="score-arrow up">↑<div class="arrow-delta">${delta>1?'+'+delta:''}</div></div>`;
+      else if(wentDown) arrowHTML=`<div class="score-arrow down">↓<div class="arrow-delta">${delta>1?'-'+delta:''}</div></div>`;
+      else arrowHTML=`<div class="score-arrow same">·</div>`;
+      const rowClass=`score-item${wentUp?' jumped':wentDown?' dropped':''}`;
+      const bg=n===myName?'background:rgba(255,210,0,.07);border-radius:10px;padding:12px 10px;':'';
       const tiedAbove=i>0&&entries[i-1][1]===pts;
-      return `<div class="score-item" ${n===myName?'style="background:rgba(255,210,0,.07);border-radius:10px;padding:12px 10px;"':''}>
-        <span>${MEDAL[i]||'  '} ${remoteAvatars[n]||''} ${n}${n===myName?' 👈':''}${tiedAbove?'<span style="font-size:10px;color:rgba(255,255,255,.35);margin-left:4px;">⚡ tie</span>':''}</span>
+      return `<div class="${rowClass}" style="${bg}">
+        ${arrowHTML}
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${MEDAL[i]||'  '} ${remoteAvatars[n]||''} ${n}${n===myName?' 👈':''}${tiedAbove?'<span style="font-size:10px;color:rgba(255,255,255,.35);margin-left:4px;">⚡ tie</span>':''}</span>
         <span class="score-pts">${pts}</span>
-      </div>`;}).join('');
+      </div>`;
+    }).join('');
     document.getElementById('p-scores-wrap').style.display='';
   }
 
