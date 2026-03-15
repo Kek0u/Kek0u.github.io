@@ -1442,7 +1442,7 @@ function onHostReceive(conn, data) {
       if(players.hasOwnProperty(name)){
         conn.send({type:'joinreject',reason:'name'}); return;
       }
-      const avatarOwner=Object.keys(playerAvatars).find(n=>playerAvatars[n]===avatar&&n!==myName);
+      const avatarOwner=Object.keys(playerAvatars).find(n=>playerAvatars[n]===avatar);
       if(avatarOwner){
         conn.send({type:'joinreject',reason:'avatar'}); return;
       }
