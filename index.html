@@ -314,6 +314,18 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
 .ok-avatar-big{font-size:80px;animation:playerBounce .65s cubic-bezier(.34,1.56,.64,1) forwards;display:block;text-align:center;filter:drop-shadow(0 8px 20px rgba(6,214,160,.6));}
 .ok-letter{display:inline-block;width:80px;height:80px;border-radius:20px;font-family:var(--ft);font-size:52px;line-height:80px;text-align:center;animation:correctLetterPop .55s cubic-bezier(.34,1.56,.64,1) .15s both;}
 .ok-text{font-size:26px;font-weight:900;color:#06d6a0;animation:correctTextSlide .4s ease .05s both;letter-spacing:1px;}
+@keyframes koShake{0%,100%{transform:translateX(0)}15%{transform:translateX(-10px) rotate(-2deg)}30%{transform:translateX(10px) rotate(2deg)}45%{transform:translateX(-8px)}60%{transform:translateX(8px)}75%{transform:translateX(-4px)}90%{transform:translateX(4px)}}
+@keyframes koAvatarDrop{0%{transform:translateY(0) rotate(0deg);opacity:1}40%{transform:translateY(-12px) rotate(-8deg)}100%{transform:translateY(0) rotate(12deg);opacity:.7}}
+@keyframes koTextIn{0%{opacity:0;transform:scale(1.4)}60%{transform:scale(.95)}100%{opacity:1;transform:scale(1)}}
+@keyframes koLetterReveal{0%{opacity:0;transform:scale(0) rotate(20deg)}60%{transform:scale(1.2) rotate(-4deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
+.ko-avatar{font-size:70px;display:block;text-align:center;animation:koAvatarDrop .5s cubic-bezier(.34,1.56,.64,1) forwards;filter:grayscale(.4);}
+.ko-text{font-size:26px;font-weight:900;color:#e84393;animation:koTextIn .35s ease .1s both;letter-spacing:1px;}
+.ko-letters{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px;}
+.ko-my-letter{display:inline-block;width:64px;height:64px;border-radius:16px;font-family:var(--ft);font-size:40px;line-height:64px;text-align:center;opacity:.45;position:relative;}
+.ko-my-letter::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px;color:rgba(255,255,255,.8);}
+.ko-arrow{font-size:24px;color:rgba(255,255,255,.4);}
+.ko-correct-letter{display:inline-block;width:64px;height:64px;border-radius:16px;font-family:var(--ft);font-size:40px;line-height:64px;text-align:center;animation:koLetterReveal .5s cubic-bezier(.34,1.56,.64,1) .25s both;}
+.result-ko{animation:koShake .55s ease .05s both;}
 .ok-stars{position:relative;height:0;overflow:visible;pointer-events:none;}
 .ok-star{position:absolute;font-size:22px;animation:starBurst .7s ease-out forwards;}
 
@@ -521,11 +533,18 @@ body{min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;backgr
         <!-- Répartition des votes (même vue que les joueurs) -->
         <div id="h-stop-suspense" style="margin-bottom:14px;"></div>
         <p style="font-weight:900;color:var(--gold);margin-bottom:10px;">✅ La bonne réponse est :</p>
-        <div class="host-abcd">
-          <button class="habtn" style="background:var(--A)" onclick="validateAns('A')">A</button>
-          <button class="habtn" style="background:var(--B)" onclick="validateAns('B')">B</button>
-          <button class="habtn" style="background:var(--C)" onclick="validateAns('C')">C</button>
-          <button class="habtn" style="background:var(--D)" onclick="validateAns('D')">D</button>
+        <div class="host-abcd" id="h-valid-btns">
+          <button class="habtn" style="background:var(--A)" onclick="confirmValidate(this,'A')">A</button>
+          <button class="habtn" style="background:var(--B)" onclick="confirmValidate(this,'B')">B</button>
+          <button class="habtn" style="background:var(--C)" onclick="confirmValidate(this,'C')">C</button>
+          <button class="habtn" style="background:var(--D)" onclick="confirmValidate(this,'D')">D</button>
+        </div>
+        <div id="h-valid-confirm" style="display:none;margin-top:12px;text-align:center;">
+          <div style="font-size:13px;color:rgba(255,255,255,.55);margin-bottom:8px;">Confirmer la bonne réponse&nbsp;: <span id="h-valid-letter" style="font-family:var(--ft);font-size:20px;"></span></div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-g" style="margin-bottom:0;flex:1;padding:12px;" onclick="cancelValidate()">Annuler</button>
+            <button class="btn btn-h" style="margin-bottom:0;flex:2;padding:12px;" id="h-valid-ok" onclick="">✅ Confirmer</button>
+          </div>
         </div>
       </div>
       <!-- Barres résultat validation -->
@@ -1591,6 +1610,8 @@ function startQuestion(){
   prevVoteNb=0; prevDist={A:0,B:0,C:0,D:0};
   document.getElementById('btn-nx').style.display='none';
   document.getElementById('h-valid').style.display='none';
+  document.getElementById('h-valid-confirm').style.display='none';
+  document.querySelectorAll('#h-valid-btns .habtn').forEach(b=>{b.style.opacity='1';b.style.outline='none';});
   document.getElementById('h-result-bars').style.display='none';
   document.getElementById('h-myans-box').style.display='';
   document.getElementById('h-myans-msg').style.display='none';
@@ -1707,6 +1728,26 @@ function stopQ(){
       : '';
   }
   vib([100,50,100]);
+}
+
+function confirmValidate(btn, letter){
+  // Mettre en surbrillance le bouton sélectionné
+  document.querySelectorAll('#h-valid-btns .habtn').forEach(b=>{
+    b.style.opacity=b===btn?'1':'0.3';
+    b.style.outline=b===btn?'3px solid #fff':'none';
+  });
+  // Afficher la zone de confirmation
+  document.getElementById('h-valid-confirm').style.display='';
+  document.getElementById('h-valid-letter').textContent=letter;
+  document.getElementById('h-valid-letter').style.color=BG[letter];
+  document.getElementById('h-valid-ok').onclick=()=>validateAns(letter);
+}
+
+function cancelValidate(){
+  document.getElementById('h-valid-confirm').style.display='none';
+  document.querySelectorAll('#h-valid-btns .habtn').forEach(b=>{
+    b.style.opacity='1'; b.style.outline='none';
+  });
 }
 
 function validateAns(correct){
@@ -2432,7 +2473,15 @@ function onPlayerReceive(data){
         <div style="margin:12px 0;"><span class="ok-letter" style="background:${BG[correct]};color:#fff;">${correct}</span></div>
       </div>`;
     }
-    else html=`<div class="result-box result-ko"><div style="font-size:52px;margin-bottom:8px;">😬</div><div style="font-size:22px;font-weight:900;color:#e84393;">RATÉ !</div><div style="margin-top:10px;font-size:15px;color:rgba(255,255,255,.7);">Ta réponse : <span style="background:${BG[myAns]};padding:3px 12px;border-radius:8px;font-family:var(--ft);font-size:20px;">${myAns}</span> &nbsp; Bonne : <span style="background:${BG[correct]};padding:3px 12px;border-radius:8px;font-family:var(--ft);font-size:20px;">${correct}</span></div></div>`;
+    else html=`<div class="result-box result-ko">
+      <span class="ko-avatar">${myAvatar}</span>
+      <div class="ko-text">RATÉ !</div>
+      <div class="ko-letters">
+        <span class="ko-my-letter" style="background:${BG[myAns]};color:#fff;">${myAns}</span>
+        <span class="ko-arrow">→</span>
+        <span class="ko-correct-letter" style="background:${BG[correct]};color:#fff;">${correct}</span>
+      </div>
+    </div>`;
     // Badge plus rapide
     const fastestBadge=questionFastest?`<div class="fastest-q-badge">⚡ Plus rapide : <strong>${remoteAvatars[questionFastest]||''} ${questionFastest}${questionFastest===myName?' 👈 toi !':''}</strong></div>`:'';
     // Barres de vote avec noms des joueurs
